@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ruang Menyemangati - Musik & Surat</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
+        .container { max-width: 600px; width: 100%; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        h1 { color: #4a90e2; margin-bottom: 10px; }
+        .sapaan { font-size: 1.2rem; font-weight: bold; color: #333; margin-bottom: 25px; }
+        .pilihan-suasana { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .btn-mood { padding: 15px; font-size: 1rem; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; color: white; transition: transform 0.2s; }
+        .btn-mood:active { transform: scale(0.95); }
+        .sedih { background-color: #778ca3; }
+        .lelah { background-color: #a55eea; }
+        .ragu { background-color: #ffb142; }
+        .senang { background-color: #2ecc71; }
+        .kotak-surat { background: #f8f9fa; border-left: 5px solid #4a90e2; padding: 20px; border-radius: 8px; text-align: left; margin-bottom: 25px; min-height: 100px; font-size: 1.1rem; line-height: 1.6; color: #444; }
+        .audio-box { background: #f1f2f6; padding: 15px; border-radius: 12px; }
+        .audio-box p { font-weight: bold; margin-bottom: 10px; color: #555; }
+        audio { width: 100%; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>✨ Ruang Semangat ✨</h1>
+        <div class="sapaan" id="sapaanUser">Halo, Teman!</div>
+
+        <p style="margin-bottom: 15px; color: #666;">Bagaimana perasaanmu saat ini? Pilih salah satu:</p>
+        <div class="pilihan-suasana">
+            <button class="btn-mood sedih" onclick="bukaSurat('sedih')">😢 Sedih / Galau</button>
+            <button class="btn-mood lelah" onclick="bukaSurat('lelah')">😫 Lelah / Stres</button>
+            <button class="btn-mood ragu" onclick="bukaSurat('ragu')">🤔 Ragu / Takut</button>
+            <button class="btn-mood senang" onclick="bukaSurat('senang')">😊 Ingin Ceria</button>
+        </div>
+
+        <div class="kotak-surat" id="isiSurat">
+            Silakan pilih perasaanmu di atas untuk membuka surat penyemangat dan memutar musik... ❤️
+        </div>
+
+        <div class="audio-box">
+            <p id="judulLagu">🎵 Musik: Menunggu kamu memilih suasana hati...</p>
+            <!-- Bar Pemutar Audio Komputer Asli -->
+            <audio id="pemutarMusik" controls loop></audio>
+        </div>
+    </div>
+
+    <script>
+        const nama = localStorage.getItem('namaPengguna') || "Teman";
+        document.getElementById('sapaanUser').innerText = `Halo, ${nama}! Selalu ada alasan untuk tersenyum hari ini.`;
+
+        // KUMPULAN DATA SURAT DAN REFF FILE MP3 LOKAL
+        const konten = {
+            sedih: {
+                surat: `Hai ${nama}, menangis atau merasa sedih itu hal yang manusiawi. Jangan menahan semuanya sendirian ya. Ingat, badai pasti berlalu dan setelah hujan selalu ada pelangi. Kamu tidak sendirian, kamu berharga!`,
+                fileMusik: "sedih.mp3",
+                judul: "🎵 Musik: Lagu Sedih Pilihanmu"
+            },
+            lelah: {
+                surat: `Istirahat dulu ya, ${nama}. Kamu sudah bekerja keras dan berjalan sejauh ini, itu hebat banget! Tarik napas dalam-dalam, lepaskan beban sejenak. Besok kita berjuang lagi dengan energi baru.`,
+                fileMusik: "lelah.mp3",
+                judul: "🎵 Musik: Lagu Santai Pilihanmu"
+            },
+            ragu: {
+                surat: `Jangan takut salah atau gagal, ${nama}. Setiap orang hebat memulai perjalanannya dari langkah yang penuh keraguan. Percayalah pada kemampuan dirimu sendiri. Kamu jauh lebih kuat dari yang kamu bayangkan!`,
+                fileMusik: "ragu.mp3",
+                judul: "🎵 Musik: Lagu Motivasi Pilihanmu"
+            },
+            senang: {
+                surat: `Yey! Ikut senang mendengarnya, ${nama}! Pertahankan energi positif ini ya. Bagikan senyumanmu ke orang-orang di sekitarmu hari ini agar dunia jadi tempat yang lebih hangat!`,
+                fileMusik: "senang.mp3",
+                judul: "🎵 Musik: Lagu Ceria Pilihanmu"
+            }
+        };
+
+        function bukaSurat(mood) {
+            const data = konten[mood];
+            
+            // Mengubah kata surat di layar
+            document.getElementById('isiSurat').innerText = data.surat;
+            
+            // Mengubah judul lagu di layar
+            document.getElementById('judulLagu').innerText = data.judul;
+            
+            // Mengambil pemutar audio dan memasukkan file .mp3 lokal
+            const audio = document.getElementById('pemutarMusik');
+            audio.src = data.fileMusik;
+            audio.load();
+            
+            // Jalankan musik (jika diblokir otomatis browser, pengguna tinggal klik play manual)
+            audio.play().catch(function(error) {
+                console.log("Autoplay ditahan browser. Pengguna cukup klik tombol Play manual.");
+            });
+        }
+    </script>
+</body>
+</html>
